@@ -18,12 +18,15 @@ package controllers
 
 import (
 	"context"
+	appsv1 "k8s.io/api/apps/v1"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
+	ctrllog "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
-
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	corev1 "k8s.io/api/core/v1"
 	indicatorv1alpha1 "github.com/arjunshenoymec/pad-operator/api/v1alpha1"
 )
 
@@ -52,6 +55,82 @@ func (r *PadReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 	// your logic here
 
 	return ctrl.Result{}, nil
+}
+
+// Function to generate a PAD deployment object
+func (r *PadReconciler) padDeployment(p *indicatorv1alpha1.Pad) *appsv1.Deployment {
+	labels := padLabels(p.Name)
+	replicas := p.Spec.Replicas
+	image := p.Spec.Image
+	source := p.Spec.Source
+	metrics := p.Spec.Metrics
+	retraining_interval := p.Spec.Retraining_interval
+	training_window_size := p.Spec.Training_window_size
+
+	deployment := &appsv1.Deployment{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: p.Name,
+			Namespace: p.Namespace,
+
+		},
+		spec: appsv1.DeploymentSpec{
+			Replicas: &replicas,
+			Selector: &metav1.LabelSelector{
+				MatchLabels: labels,
+			},
+			Template: corev1.PodTemplateSpec{
+				ObjectMeta: metav1.ObjectMeta{
+					Labels: labels,
+				},
+				Spec: corev1.PodSpec{
+					Containers: []corev1.Container{{
+						Image: image,
+						Name: "Prometheus-Anomaly-Detector",
+						Ports: []corev1.ContainerPort{{
+							ContainerPort: 8080,
+							Name:          "pad",
+						}},
+						Env: []corev1.EnvVar{
+							{
+								Name: "FLT_PROM_URL",
+								Value: source
+							},
+							{
+								Name: "FLT_PROM_ACCESS_TOKEN",
+								Value: "my-access-token"
+							},
+							{
+								Name: "FLT_METRICS_LIST",
+								Value: metrics
+							},
+							{
+								Name: "FLT_RETRAINING_INTERVAL_MINUTES",
+								Value: retraining_interval
+							},
+							{
+								Name: "FLT_ROLLING_TRAINING_WINDOW_SIZE",
+								Value: training_window_size
+							},
+							{
+								Name: "FLT_DEBUG_MODE",
+								Value: true
+							},
+							{
+								Name: "APP_FILE",
+								Value: "app.py"
+							},
+						},
+					}},
+				},
+			},
+		},
+	}
+	ctrl.SetControllerReference(p, deployment, r.Scheme)
+	return deployment
+}
+
+func padLabels(name string) map[string]string {
+        return map[string]string{"app":"pad", "pad_cr": name}
 }
 
 // SetupWithManager sets up the controller with the Manager.
