@@ -1,0 +1,7 @@
+apiVersion: indicator.padoperator/v1alpha1
+kind: Pad
+metadata:
+  name: pad-sample
+spec:
+  # Add fields here
+  foo: bar

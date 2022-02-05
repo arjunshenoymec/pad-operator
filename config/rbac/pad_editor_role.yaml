@@ -1,0 +1,24 @@
+# permissions for end users to edit pads.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: pad-editor-role
+rules:
+- apiGroups:
+  - indicator.padoperator
+  resources:
+  - pads
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - indicator.padoperator
+  resources:
+  - pads/status
+  verbs:
+  - get
