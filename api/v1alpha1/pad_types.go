@@ -25,19 +25,18 @@ import (
 
 // PadSpec defines the desired state of Pad
 type PadSpec struct {
-   Name string `json:"name"`
-   // +kubebuilder:default:="quay.io/aicoe/prometheus-anomaly-detector:latest"
-   Image string `json:"image,omitempty"`
-   // +kubebuilder:default:=1
-   Replicas int `json:"replicas,omitempty"`
-   // +kubebuilder:default:="http://demo.robustperception.io:9090/"
-   Source string `json:"source,omitempty"`
-   // +kubebuilder:default:="['up']"
-   Metrics []string `json:"metrics,omitempty"`
-   // +kubebuilder:default:=15
-   Retraining_interval int `json:"retraining_interval,omitempty"`
-   // +kubebuilder:default:="24h"
-   Training_window_size string `json:"training_window_size,omitempty"`
+	// +kubebuilder:default:="quay.io/aicoe/prometheus-anomaly-detector:latest"
+	Image string `json:"image,omitempty"`
+	// +kubebuilder:default:=1
+	Replicas int32 `json:"replicas,omitempty"`
+	// +kubebuilder:default:="http://demo.robustperception.io:9090/"
+	Source string `json:"source,omitempty"`
+	// +kubebuilder:default:="up"
+	Metrics string `json:"metrics,omitempty"`
+	// +kubebuilder:default:="15"
+	Retraining_interval string `json:"retraining_interval,omitempty"`
+	// +kubebuilder:default:="24h"
+	Training_window_size string `json:"training_window_size,omitempty"`
 }
 
 // PadStatus defines the observed state of Pad

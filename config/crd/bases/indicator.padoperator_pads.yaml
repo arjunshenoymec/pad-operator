@@ -40,26 +40,21 @@ spec:
                 default: quay.io/aicoe/prometheus-anomaly-detector:latest
                 type: string
               metrics:
-                default: '[''up'']'
-                items:
-                  type: string
-                type: array
-              name:
+                default: up
                 type: string
               replicas:
                 default: 1
+                format: int32
                 type: integer
               retraining_interval:
-                default: 15
-                type: integer
+                default: "15"
+                type: string
               source:
                 default: http://demo.robustperception.io:9090/
                 type: string
               training_window_size:
                 default: 24h
                 type: string
-            required:
-            - name
             type: object
           status:
             description: PadStatus defines the observed state of Pad
