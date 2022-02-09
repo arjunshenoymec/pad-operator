@@ -1,0 +1,70 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
+  name: pads.indicator.padoperator
+spec:
+  group: indicator.padoperator
+  names:
+    kind: Pad
+    listKind: PadList
+    plural: pads
+    singular: pad
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Pad is the Schema for the pads API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: PadSpec defines the desired state of Pad
+            properties:
+              image:
+                default: quay.io/aicoe/prometheus-anomaly-detector:latest
+                type: string
+              metrics:
+                default: up
+                type: string
+              replicas:
+                default: 1
+                format: int32
+                type: integer
+              retraining_interval:
+                default: "15"
+                type: string
+              source:
+                default: http://demo.robustperception.io:9090/
+                type: string
+              training_window_size:
+                default: 24h
+                type: string
+            type: object
+          status:
+            description: PadStatus defines the observed state of Pad
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

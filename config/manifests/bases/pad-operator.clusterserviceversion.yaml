@@ -1,0 +1,48 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: '[]'
+    capabilities: Basic Install
+  name: pad-operator.v0.0.0
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - description: Pad is the Schema for the pads API
+      displayName: Pad
+      kind: Pad
+      name: pads.indicator.padoperator
+      version: v1alpha1
+  description: Operator for managing prometheus-anomaly-detector instances.
+  displayName: pad-operator
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      deployments: null
+    strategy: ""
+  installModes:
+  - supported: false
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - prometheus-anomaly-detector
+  - anomaly-detection
+  links:
+  - name: Pad Operator
+    url: https://pad-operator.domain
+  maintainers:
+  - email: arjunshenoymec@gmail.com
+    name: arjunshenoymec
+  maturity: alpha
+  provider:
+    name: arjunshenoymec
+  version: 0.0.0
